@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cgcreate -g cpu,memory:/lim
+trap "cgdelete cpu,memory:lim" INT TERM EXIT
 while getopts ":m:c:" option
 do
 	case $option in
