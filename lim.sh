@@ -13,7 +13,7 @@ cgroup_name="lim-$(generate_uuid)"
 trap "cgdelete cpu,memory:$cgroup_name" INT TERM EXIT
 
 cgcreate -g cpu,memory:/$cgroup_name
-while getopts ":m:c:" option
+while getopts ":hm:c:" option
 do
   case $option in
   m)
@@ -21,6 +21,10 @@ do
     ;;
   c)
     cgset -r cpu.shares=$OPTARG $cgroup_name
+    ;;
+  h)
+    echo "usage: $0 [-h] [-c <cpu_shares>] [-m <memory_limit_in_bytes>] command" >&2
+    exit 2
     ;;
   :)
     echo "The $OPTARG options requires an argument" >&2
