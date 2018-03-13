@@ -4,12 +4,14 @@ rnd_str() {
   cat /dev/urandom | tr -dc 'a-z0-9' | fold -w $1 | head -n 1
 }
 
+# A function to randomly generate a UUID
 generate_uuid () {
   echo "$(rnd_str '8')-$(rnd_str '4')-$(rnd_str '4')-$(rnd_str '4')-$(rnd_str '12')"
 }
 
 cgroup_name="lim-$(generate_uuid)"
 
+# In case of exit signal we delete the cgroup
 trap "cgdelete cpu,memory:$cgroup_name" INT TERM EXIT
 
 cgcreate -g cpu,memory:/$cgroup_name
